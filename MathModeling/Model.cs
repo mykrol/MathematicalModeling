@@ -74,7 +74,7 @@ namespace MathModeling
                     }
                 }
             }
-            return new List<List<Point>>();
+            return mesh;
         }
     }
 }
