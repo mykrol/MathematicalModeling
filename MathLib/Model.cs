@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using MathNet.Numerics.LinearAlgebra;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace MathModeling
+namespace MathLib
 {
     public struct Point
     {
-        public Point(  double x1,
+        public Point(double x1,
                 double x2,
                 double t,
                 double y)
@@ -18,6 +18,13 @@ namespace MathModeling
             t_ = t;
             y_ = y;
         }
+
+        public override String ToString()
+        {
+            return "{" + x1_.ToString() + ", " + x2_.ToString() + ", " +
+                    t_.ToString() + ", " + y_.ToString() + "} ";
+        }
+
         public double x1_;
         public double x2_;
         public double t_;
@@ -38,7 +45,7 @@ namespace MathModeling
         // 
         //  
         //
-        static List<List<Point>> GetPoints(double t0,
+        public static List<List<Point>> GetPoints(double t0,
                                            double T,
                                            double x0,
                                            double y0,
@@ -61,7 +68,7 @@ namespace MathModeling
                 List<Point> ltime = mesh.Last();
                 for (int x = 0; x < N; ++x)
                 {
-                    for (int y=0; y < N; ++y)
+                    for (int y = 0; y < N; ++y)
                     {
                         ltime.Add(new Point(x0 + xh * x,
                                              y0 + yh * y,
@@ -74,9 +81,7 @@ namespace MathModeling
                     }
                 }
             }
-
             return mesh;
-
         }
     }
 }
