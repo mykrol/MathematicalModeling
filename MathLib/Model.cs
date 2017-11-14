@@ -34,12 +34,24 @@ namespace MathLib
 
     public class Model
     {
+        public const double C = 2.0;
+        public const int Mx1    = 1000;
+        public const int Mx2    = 1000;
+        public const int Mt     = 1000;
 
         static double solution(double x1, double x2, double t)
         {
             // y(x1, x2, t) = sin(x1 * t) * sin(x2*t)
             return Math.Sin(x1 * t) * Math.Sin(x2 * t);
         }
+
+        static double rhsU(double x1, double x2, double t)
+        {
+            return (2 * Math.Pow(C, 2) * Math.Pow(t, 2) - Math.Pow(x1, 2) - Math.Pow(x2, 2)) * solution(x1, x2, t) +
+                    2 * x1 * x2 * Math.Cos(t * x1) * Math.Cos(t * x2);
+        }
+
+        //static double greenFunction()
 
         //
         // 
