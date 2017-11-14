@@ -2,38 +2,160 @@
     ViewBag.Title = "Home Page";
 }
 
+
+@*<script src="~/Scripts/angular.min.js"></script>*@
+<script src="~/Scripts/plotly-latest.min.js"></script>
+<script src="~/Scripts/HomeController.js"></script>
+
 <div class="row text-center">
     <h1>Комплекс розв'язування задач математичного моделювання систем з дискретним часом та дискретними моделюючими функціями</h1>
 </div>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="row text-center">
-            <h2>Задання параметрів задачі</h2>
-        </div>
-        <div class="row text-center">
-            <h3>Опис моделі</h3>
-        </div>
-        
-        <div class="row">
-            <span>Функція Грінна G(x)</span>
-        </div>
-        <div class="row">
-            <input class="form-control" type="text" />
-        </div>
-        <div class="row">
-            <span>Кінцевий момент часу Т</span>
-        </div>
-        <div class="row">
-            <input class="form-control" type="text" />
-        </div>
+<div ng-app="MathModApp" ng-controller="HomeController">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row text-center">
+                <h2>Задання параметрів задачі</h2>
+            </div>
+            <div class="row text-center">
+                <h3>Опис моделі</h3>
+            </div>
 
-        <div class="row text-center">
-            <h5>Початкові умови:</h5>
-            <
+            <div class="row">
+                <span>Функція Грінна G(x)</span>
+            </div>
+            <div class="row">
+                <input class="form-control" type="text" ng-model="GrinFunction" />
+            </div>
+            <div class="row">
+                <span>Кінцевий момент часу Т</span>
+            </div>
+            <div class="row text-center">
+                <input class="form-control" type="text" ng-model="TValue" />
+            </div>
+            <div class="row text-center">
+                <span>Задайте область для х1<sub>1</sub></span>
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <div classs="row">
+                        <span>Лівий кінець:</span>
+                    </div>
+                    <div class="row">
+                        <input class="form-control" ng-model="x1Start" />
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div classs="row">
+                        <span>Правий кінець:</span>
+                    </div>
+                    <div class="row">
+                        <input class="form-control" ng-model="x1End" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <span>Задайте область для х2<sub>1</sub></span>
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <div classs="row">
+                        <span>Лівий кінець:</span>
+                    </div>
+                    <div class="row">
+                        <input class="form-control" ng-model="x2Start" />
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div classs="row">
+                        <span>Правий кінець:</span>
+                    </div>
+                    <div class="row">
+                        <input class="form-control" ng-model="x2End" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row text-center">
+                <h5>Початкові умови:</h5>
+
+                <div class="col-md-10 table_fixed">
+                    <table class="table table-bordered ">
+                        <tr>
+                            <th class="text-center">№</th>
+                            <th class="text-center">x<sub>l</sub></th>
+                            <th class="text-center">Y<sub>0l</sub></th>
+                        </tr>
+                        <tr ng-repeat="i in [] |range:StartCondTableRowsNumber">
+                            <td width="10%">
+                                {{i+1}}
+                            </td>
+                            <td width="45%">
+                                <input type="text" class="form-control input_form table_input" ng-change="addStartCondRow(i)" ng-model="XL[i] " />
+                            </td>
+                            <td width="45%">
+                                <input type="text" class="form-control input_form table_input" ng-change="addStartCondRow(i)" ng-model="Y0L[i]" />
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+
+            </div>
+            <div class="row text-center">
+                <h5>Крайові умови:</h5>
+
+                <div class="col-md-10 table_fixed">
+                    <table class="table table-bordered ">
+                        <tr>
+                            <th class="text-center">№</th>
+                            <th class="text-center">s<sub>l</sub></th>
+                            <th class="text-center">Y<sub>Hl</sub></th>
+                        </tr>
+                        <tr ng-repeat="i in [] |range:BorderCondTableRowsNumber">
+                            <td width="10%">
+                                {{i+1}}
+                            </td>
+                            <td width="45%">
+                                <input type="text" class="form-control input_form table_input" ng-change="addBorderCondRow(i)" ng-model="SL[i] " />
+                            </td>
+                            <td width="45%">
+                                <input type="text" class="form-control input_form table_input" ng-change="addBorderCondRow(i)" ng-model="YHL[i]" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="plot" style="width:600px;height:250px;padding-top:100px;"></div>
+
         </div>
     </div>
-    <div class="col-md-6">
 
+    <div class="row">
+        <buttom class="btn btn-default" style="width:50px;height:30px;" ng-click="DrawPlot(1.2)"></buttom>
     </div>
 </div>
+
+
+<script>
+    var app = angular.module("MathModApp", []);
+
+	//TESTER = document.getElementById('tester');
+	//Plotly.plot( TESTER, [{
+	//x: [1, 2, 3, 4, 5],
+	//y: [1, 2, 4, 8, 16] }], {
+	//    margin: { t: 0 }
+	//});
+
+
+	var Problem = {};
+	Problem.GrinFunction = 'x ^ 2 * 2';
+	Problem.TValue = 5;
+	InitHomeController(Problem);
+
+</script>
