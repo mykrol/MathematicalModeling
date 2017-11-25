@@ -45,13 +45,20 @@ namespace MathLib
             return Math.Sin(x1 * t) * Math.Sin(x2 * t);
         }
 
-        static double rhsU(double x1, double x2, double t)
+        public static double rhsU(double x1, double x2, double t)
         {
             return (2 * Math.Pow(C, 2) * Math.Pow(t, 2) - Math.Pow(x1, 2) - Math.Pow(x2, 2)) * solution(x1, x2, t) +
                     2 * x1 * x2 * Math.Cos(t * x1) * Math.Cos(t * x2);
         }
 
-        //static double greenFunction()
+        //G(s1 - s2)
+        public static double GreenFunction(Point s1, Point s2)
+        {
+            double r = Math.Sqrt(Math.Pow(s1.x1_ - s2.x1_, 2) + Math.Pow(s1.x2_ - s2.x2_, 2));
+            double num = C * (s1.t_ - s2.t_) - r;
+            if (num <= 0) return 0;
+            return num / (2 * Math.PI * C * (C * C * Math.Pow(s1.t_ - s2.t_, 2) - r * r));
+        }
 
         //
         // 
